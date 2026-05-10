@@ -1,0 +1,300 @@
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --nugrey:#eceded;
+  --nublue:#252D64;
+  --nugreen:#59a345;
+  --blueliner:#4dc7ec;
+  --white:#ffffff;
+  --nublue-10:rgba(37,45,100,0.08);
+  --nublue-20:rgba(37,45,100,0.18);
+  --nublue-40:rgba(37,45,100,0.35);
+  --shadow-sm:0 2px 8px rgba(37,45,100,0.10);
+  --shadow-md:0 6px 24px rgba(37,45,100,0.14);
+  --radius:12px;
+  --radius-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Montserrat',sans-serif;background:var(--nugrey);color:var(--nublue);-webkit-font-smoothing:antialiased}
+.page{max-width:900px;margin:0 auto;padding:40px 20px 60px}
+
+/* PAGE HEADER */
+.page-title{font-size:2rem;font-weight:900;letter-spacing:-0.03em;color:var(--nublue);line-height:1.1;margin-bottom:6px}
+.page-sub{font-size:0.9rem;font-weight:400;color:rgba(37,45,100,0.6);line-height:1.6;max-width:720px;margin-bottom:28px}
+
+/* CARDS */
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-md);margin-bottom:24px;overflow:hidden}
+.card-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--nugreen);padding:18px 28px 0}
+.card-body{padding:16px 28px 28px}
+
+/* FORM CONTROLS */
+.field{margin-bottom:0}
+.field+.field{margin-top:22px}
+.field label{display:block;font-size:0.82rem;font-weight:600;color:var(--nublue);margin-bottom:7px}
+.field label span{font-weight:400;color:rgba(37,45,100,0.5);font-size:0.78rem}
+.sel-wrap{position:relative}
+.sel-wrap::after{content:"";position:absolute;right:16px;top:50%;transform:translateY(-50%);width:10px;height:6px;background:var(--nublue);clip-path:polygon(0 0,100% 0,50% 100%);pointer-events:none}
+select,input[type=number]{font-family:'Montserrat',sans-serif;font-weight:600;font-size:0.95rem;color:var(--nublue);background:var(--white);border:2px solid var(--nublue-20);border-radius:var(--radius-sm);padding:13px 44px 13px 16px;width:100%;appearance:none;-webkit-appearance:none;transition:border-color 0.2s,box-shadow 0.2s;outline:none}
+input[type=number]{padding:13px 16px;width:200px}
+select:hover,input[type=number]:hover{border-color:var(--nublue-40)}
+select:focus,input[type=number]:focus{border-color:var(--nugreen);box-shadow:0 0 0 3px rgba(89,163,69,0.18)}
+select:disabled{opacity:0.45;cursor:not-allowed}
+.fields-row{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end}
+.fields-row .field{flex:1;min-width:180px}
+.fields-row .field:last-child{flex:0 0 auto}
+
+/* RESULT CARD */
+.result-card{background:var(--nublue);border-radius:var(--radius);box-shadow:var(--shadow-md);margin-bottom:24px;padding:28px;display:none}
+.result-card.visible{display:block;animation:fadeUp 0.3s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.result-eyebrow{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--blueliner);margin-bottom:6px}
+.result-desc{font-size:0.9rem;font-weight:600;color:rgba(255,255,255,0.9);margin-bottom:20px}
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.metric-block{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.10);border-radius:var(--radius-sm);padding:14px 16px;text-align:center}
+.metric-lbl{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.5);margin-bottom:6px}
+.metric-val{font-size:2rem;font-weight:900;color:var(--white);letter-spacing:-0.03em;line-height:1}
+.metric-val.ok{color:#6ee7a0}
+.metric-val.out{color:#fc8181}
+.metric-unit{font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.5);margin-top:4px}
+.result-note{border-top:1px solid rgba(255,255,255,0.10);padding-top:14px;font-size:0.75rem;font-weight:400;color:rgba(255,255,255,0.45);line-height:1.6}
+
+/* LEGEND */
+.legend{display:flex;gap:20px;flex-wrap:wrap;padding-top:16px;border-top:1px solid var(--nublue-10);margin-top:6px}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:0.72rem;font-weight:600;color:rgba(37,45,100,0.6)}
+.ldot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+
+/* TABLE */
+.tbl-scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:860px}
+thead tr.th-top th{background:var(--nublue);color:var(--white);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:12px 10px;text-align:center}
+thead tr.th-top th.th-left{text-align:left;padding-left:18px}
+thead tr.th-top th.th-wt{border-right:2px solid rgba(255,255,255,0.15)}
+thead tr.th-sub th{background:rgba(37,45,100,0.88);color:rgba(255,255,255,0.7);font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:8px 10px;text-align:center}
+thead tr.th-sub th.th-left{text-align:left;padding-left:18px}
+thead tr.th-sub th.th-wt-fd{border-right:1px solid rgba(255,255,255,0.12)}
+thead tr.th-sub th.th-wt-pd{border-right:2px solid rgba(255,255,255,0.2)}
+thead tr.th-sub th.th-nwt-fd{border-right:1px solid rgba(255,255,255,0.12)}
+thead tr.th-load th{background:#f2f5fc;color:var(--nublue);font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:7px 10px;text-align:center;border-bottom:2px solid rgba(37,45,100,0.12)}
+thead tr.th-load th.th-left{text-align:left;padding-left:18px;color:rgba(37,45,100,0.4)}
+thead tr.th-load th.sep3{border-right:2px solid rgba(37,45,100,0.15)}
+tbody tr{border-bottom:1px solid var(--nublue-10);transition:background 0.15s}
+tbody tr:hover{background:var(--nublue-10)}
+tbody tr.row-active{background:rgba(89,163,69,0.10);border-left:3px solid var(--nugreen)}
+tbody tr.row-active td{font-weight:700}
+td.td-name{padding:11px 18px;font-size:0.82rem;font-weight:600}
+td.td-thick{padding:11px 10px;font-size:0.8rem;font-weight:600;text-align:center;color:rgba(37,45,100,0.6);border-right:2px solid var(--nublue-10)}
+td.td-val{padding:10px 8px;font-size:0.82rem;font-weight:600;text-align:center;white-space:nowrap}
+td.sep{border-right:2px solid var(--nublue-10)}
+td.td-na{color:rgba(37,45,100,0.25);font-weight:400}
+td.td-ok{color:#1a6b35;background:rgba(89,163,69,0.08)}
+td.td-out{color:#c53030;background:rgba(197,48,48,0.06)}
+
+/* BADGES */
+.badge{display:inline-block;padding:3px 11px;border-radius:20px;font-size:0.72rem;font-weight:700;letter-spacing:0.02em}
+.b-blue{background:#e6f6fd;color:#1a4a8c;border:1px solid #4dc7ec}
+.b-x{background:#eaf5e8;color:#1a5c2e;border:1px solid #59a345}
+.b-xl{background:#fff3e0;color:#7b3c00;border:1px solid #f6ad55}
+.b-xxl{background:#f0ebff;color:#44299e;border:1px solid #9f7aea}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:52px 20px;color:rgba(37,45,100,0.3)}
+.empty-ico{font-size:36px;margin-bottom:12px}
+.empty-txt{font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
+.empty-sub{font-size:0.75rem;font-weight:400;margin-top:5px;color:rgba(37,45,100,0.25)}
+
+/* FOOTER */
+.page-footer{text-align:center;font-size:0.72rem;font-weight:600;color:rgba(37,45,100,0.35);margin-top:8px}
+
+/* RESPONSIVE */
+@media(max-width:520px){
+  .page{padding:24px 14px 40px}
+  .page-title{font-size:1.4rem}
+  .card-body{padding:14px 16px 20px}
+  .card-label{padding:14px 16px 0}
+  .metric-grid{grid-template-columns:repeat(2,1fr)}
+  .fields-row{flex-direction:column}
+  input[type=number]{width:100%}
+}
+</style>
+
+<div class="page">
+
+  <!-- PAGE HEADER -->
+  <h1 class="page-title">Liner Safe Depth Calculator</h1>
+  <p class="page-sub">A preliminary reference tool for identifying minimum and maximum depth of cover ranges for Nuflow liners under live load and no-load conditions — with both no water table and water table to surface scenarios. Based on AS/NZS 2566.1 and ASTM F1216. For initial project review only.</p>
+
+  <!-- INPUTS CARD -->
+  <div class="card">
+    <div class="card-label">Inputs</div>
+    <div class="card-body">
+      <div class="fields-row">
+        <div class="field">
+          <label for="nf-dia">Pipe Diameter</label>
+          <div class="sel-wrap">
+            <select id="nf-dia" onchange="nfChange()">
+              <option value="">Select diameter…</option>
+              <option>DN150</option><option>DN225</option><option>DN300</option>
+              <option>DN375</option><option>DN450</option><option>DN525</option><option>DN600</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="nf-dep">Check Depth of Cover (m) <span>— optional</span></label>
+          <input id="nf-dep" type="number" step="0.05" min="0" max="10" placeholder="e.g. 1.5" disabled oninput="nfChange()">
+        </div>
+      </div>
+      <div id="nf-leg" class="legend" style="display:none">
+        <div class="legend-item"><span class="ldot" style="background:rgba(89,163,69,0.15);border:1px solid #59a345"></span>Within range</div>
+        <div class="legend-item"><span class="ldot" style="background:rgba(197,48,48,0.08);border:1px solid #fc8181"></span>Outside range</div>
+        <div class="legend-item"><span class="ldot" style="background:rgba(37,45,100,0.05);border:1px solid rgba(37,45,100,0.15)"></span>Not applicable</div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- RESULTS CARD -->
+  <div class="card" id="nf-results-card">
+    <div class="card-label">Results</div>
+    <div class="card-body" style="padding-bottom:8px">
+      <div id="nf-empty" class="empty">
+        <div class="empty-ico">📐</div>
+        <div class="empty-txt">No diameter selected</div>
+        <div class="empty-sub">Choose a pipe diameter above to view safe depth ranges</div>
+      </div>
+    </div>
+    <div id="nf-tbl-wrap" class="tbl-scroll" style="display:none">
+      <table>
+        <thead>
+          <tr class="th-top">
+            <th class="th-left" colspan="2">Liner</th>
+            <th colspan="4" class="th-wt">💧 Water Table to Surface</th>
+            <th colspan="4">☀️ No Water Table</th>
+          </tr>
+          <tr class="th-sub">
+            <th class="th-left">Type</th>
+            <th class="th-left">Thick.</th>
+            <th colspan="2" class="th-wt-pd">Fully Deteriorated</th>
+            <th colspan="2" class="th-wt-pd">Partial Deteriorated</th>
+            <th colspan="2" class="th-nwt-fd">Fully Deteriorated</th>
+            <th colspan="2">Partial Deteriorated</th>
+          </tr>
+          <tr class="th-load">
+            <th class="th-left"></th><th></th>
+            <th>No Loads</th><th class="sep3">SM1600</th>
+            <th>No Loads</th><th class="sep3">SM1600</th>
+            <th>No Loads</th><th class="sep3">SM1600</th>
+            <th>No Loads</th><th>SM1600</th>
+          </tr>
+        </thead>
+        <tbody id="nf-tbody"></tbody>
+      </table>
+    </div>
+    <!-- Design parameters -->
+    <div style="padding:20px 28px 24px;border-top:1px solid var(--nublue-10);margin-top:4px">
+      <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--nugreen);margin-bottom:10px">Design Parameters</div>
+      <ul style="padding-left:16px;font-size:0.78rem;font-weight:400;color:rgba(37,45,100,0.65);line-height:1.9">
+        <li>Short-term material flexural modulus of 2,500 MPa as provided by Nuflow.</li>
+        <li>Vehicle loading uses SM1600 loads per AS5100.2:2017, distributed per AS/NZS 2566.1.</li>
+        <li>4 MPa combined soil modulus — host pipe wall must be snug against liner without voids. Deteriorated pipes require project-specific design.</li>
+        <li>MIN and MAX cover figures are measured from FSL to top of pipe.</li>
+      </ul>
+      <div style="margin-top:14px;padding:12px 16px;background:rgba(37,45,100,0.04);border-left:3px solid var(--nugreen);border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:0.78rem;font-weight:600;color:rgba(37,45,100,0.7)">
+        ⚠️ This is a preliminary reference tool only. Any project outside these parameters must have a Liner Design Verification Form completed.
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">© Nuflow Australasia · Liner Safe Depth Calculator</div>
+</div>
+
+<script>
+var LD=[
+  {d:"DN150",l:"Blueline Standard",t:4,   c:[[0.3,5],[0.3,5],[0.6,5],[0.6,5],[0.3,5],[0.3,5],[0.6,5],[0.6,5]]},
+  {d:"DN150",l:"Blueline X",       t:3.5, c:[[0.3,5],[0.3,5],[0.6,5],[0.6,5],[0.3,5],[0.3,5],[0.6,5],[0.6,5]]},
+  {d:"DN150",l:"Sumoline X",       t:4.5, c:[[0.3,5],[0.3,5],[0.6,5],[0.6,5],[0.3,5],[0.3,5],[0.6,5],[0.6,5]]},
+  {d:"DN225",l:"Blueline Standard",t:4,   c:[[0.3,4.2],[0.3,3.8],[0.6,4.1],[0.65,3.1],[0.3,5],[0.3,4.5],[0.6,5],[0.65,3.9]]},
+  {d:"DN225",l:"Blueline X",       t:3.5, c:[[0.3,5],[0.3,4.4],[0.6,5],[0.6,3.9],[0.3,5],[0.3,5],[0.6,5],[0.6,4.7]]},
+  {d:"DN225",l:"Sumoline X",       t:4.5, c:[[0.3,5],[0.3,5],[0.6,5],[0.6,5],[0.3,5],[0.3,5],[0.6,5],[0.6,5]]},
+  {d:"DN300",l:"Blueline Standard",t:4,   c:[[0.3,5],null,[0.6,0.6],[1,1.5],[0.3,5],[0.3,4.9],[0.6,5],[1,2.4]]},
+  {d:"DN300",l:"Blueline X",       t:3.5, c:[[0.3,2.5],[0.3,2.5],[0.6,2.5],[0.8,2.5],[0.3,5],[0.3,3.8],[0.6,5],[0.71,3.1]]},
+  {d:"DN300",l:"Sumoline X",       t:4.5, c:[[0.3,5],[0.3,5],[0.6,4.5],[0.6,4.5],[0.3,5],[0.3,5],[0.6,5],[0.6,5]]},
+  {d:"DN300",l:"Sumoline XL",      t:7.5, c:[[0.3,5],[0.3,5],[0.6,5],[0.6,5],[0.3,5],[0.3,5],[0.6,5],[0.6,5]]},
+  {d:"DN375",l:"Blueline Standard",t:4,   c:[[0.3,0.5],null,null,null,[0.3,2.5],[0.3,2.5],[0.6,5],null]},
+  {d:"DN375",l:"Blueline X",       t:3.5, c:[[0.3,5],[0.3,1.1],[0.6,1.1],null,[0.3,5],[0.3,3],[0.6,5],[1.1,2]]},
+  {d:"DN375",l:"Sumoline X",       t:4.5, c:[[0.3,5],[0.3,2.7],[0.6,4.5],[0.65,3.4],[0.3,5],[0.3,3.9],[0.6,5],[0.65,4.1]]},
+  {d:"DN375",l:"Sumoline XL",      t:7.5, c:[[0.3,5],[0.3,5],[0.6,5],[0.6,5],[0.3,5],[0.3,5],[0.6,5],[0.6,5]]},
+  {d:"DN450",l:"Blueline Standard",t:4,   c:[null,null,null,null,[0.3,5],[0.3,2],[0.6,5],null]},
+  {d:"DN450",l:"Blueline X",       t:3.5, c:[[0.3,0.4],[0.3,0.4],null,null,[0.3,5],[0.3,2.4],[0.6,5],null]},
+  {d:"DN450",l:"Sumoline X",       t:4.5, c:[[0.3,2.5],[0.3,2.5],[0.6,2.5],[0.6,2.5],[0.3,5],[0.3,3.8],[0.6,5],[0.6,3]]},
+  {d:"DN450",l:"Sumoline XL",      t:7.5, c:[[0.3,5],[0.3,5],[0.6,5],[0.6,4.7],[0.3,5],[0.3,5],[0.6,5],[0.6,5]]},
+  {d:"DN450",l:"Sumoline XXL",     t:7.5, c:[[0.3,5],[0.3,5],[0.6,5],[0.6,5],[0.3,5],[0.3,5],[0.6,5],[0.6,5]]},
+  {d:"DN525",l:"Blueline Standard",t:4,   c:[null,null,null,null,null,null,null,null]},
+  {d:"DN525",l:"Blueline X",       t:3.5, c:[null,null,null,null,[0.3,5],[0.3,1.9],null,null]},
+  {d:"DN525",l:"Sumoline X",       t:4.5, c:[[0.3,1.3],[0.3,1.3],null,null,[0.3,5],[0.3,3.1],[0.6,5],null]},
+  {d:"DN525",l:"Sumoline XL",      t:7.5, c:[[0.3,5],[0.3,4.4],[0.6,5],[0.6,3.9],[0.3,5],[0.3,5],[0.6,5],[0.6,4.6]]},
+  {d:"DN525",l:"Sumoline XXL",     t:11,  c:[[0.3,5],[0.3,5],[0.6,5],[0.6,5],[0.3,5],[0.3,5],[0.6,5],[0.6,5]]},
+  {d:"DN600",l:"Blueline Standard",t:4,   c:[null,null,null,null,null,null,null,null]},
+  {d:"DN600",l:"Blueline X",       t:4,   c:[null,null,null,null,null,null,null,null]},
+  {d:"DN600",l:"Sumoline X",       t:4.5, c:[[0.3,0.6],[0.3,0.7],null,null,[0.3,5],[0.3,2.6],[0.6,5],null]},
+  {d:"DN600",l:"Sumoline XL",      t:7.5, c:[[0.3,4.1],[0.3,3.8],[0.6,5],[0.7,3.1],[0.3,5],[0.3,4.4],[0.6,5],[0.7,3.8]]},
+  {d:"DN600",l:"Sumoline XXL",     t:11,  c:[[0.3,5],[0.3,5],[0.6,5],[0.6,5],[0.3,5],[0.3,5],[0.6,5],[0.6,5]]}
+];
+
+var SEP=[false,true,false,true,false,true,false,false];
+
+function badge(l){
+  var lo=l.toLowerCase();
+  if(lo.includes("blue")) return "badge b-blue";
+  if(l.includes("XXL"))   return "badge b-xxl";
+  if(l.includes("XL"))    return "badge b-xl";
+  return "badge b-x";
+}
+
+function nfChange(){
+  var dia=document.getElementById("nf-dia").value;
+  var depEl=document.getElementById("nf-dep");
+  var depV=depEl.value;
+  var dep=(depV!=="")?parseFloat(depV):null;
+
+  depEl.disabled=!dia;
+  if(!dia){depEl.value="";}
+
+  document.getElementById("nf-empty").style.display=dia?"none":"block";
+  document.getElementById("nf-tbl-wrap").style.display=dia?"block":"none";
+  document.getElementById("nf-leg").style.display=(dia&&dep!==null)?"flex":"none";
+
+  if(!dia) return;
+
+  var rows=LD.filter(function(r){return r.d===dia;});
+  var html="";
+
+  rows.forEach(function(row){
+    var rowOk=0,rowOut=0;
+    row.c.forEach(function(v){
+      if(!v||dep===null) return;
+      if(dep>=v[0]&&dep<=v[1]) rowOk++;
+      else rowOut++;
+    });
+    var active=(dep!==null&&rowOk>0&&rowOut===0)?"row-active":"";
+    html+='<tr class="'+active+'">';
+    html+='<td class="td-name"><span class="'+badge(row.l)+'">'+row.l+'</span></td>';
+    html+='<td class="td-thick">'+row.t+' mm</td>';
+    row.c.forEach(function(v,i){
+      var cls="td-val",txt;
+      if(SEP[i]) cls+=" sep";
+      if(!v){cls+=" td-na";txt="—";}
+      else if(dep!==null){
+        cls+=(dep>=v[0]&&dep<=v[1])?" td-ok":" td-out";
+        txt=v[0]+"–"+v[1]+"m";
+      } else {txt=v[0]+"–"+v[1]+"m";}
+      html+='<td class="'+cls+'">'+txt+'</td>';
+    });
+    html+='</tr>';
+  });
+
+  document.getElementById("nf-tbody").innerHTML=html;
+
+
+}
+</script>
