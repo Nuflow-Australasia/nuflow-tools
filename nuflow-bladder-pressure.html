@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bladder Pressure Guide — Nuflow</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --nugrey:    #eceded;
+    --nublue:    #252D64;
+    --nugreen:   #59a345;
+    --blueliner: #4dc7ec;
+    --white:     #ffffff;
+    --nublue-10: rgba(37,45,100,0.08);
+    --nublue-20: rgba(37,45,100,0.18);
+    --nublue-40: rgba(37,45,100,0.35);
+    --shadow-md: 0 6px 24px rgba(37,45,100,0.14);
+    --radius:    12px;
+    --radius-sm: 8px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    background: var(--nugrey);
+    color: var(--nublue);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 20px 0;
+  }
+
+  .page-title {
+    font-weight: 900;
+    font-size: 2rem;
+    color: var(--nublue);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .page-subtitle {
+    color: var(--nublue);
+    opacity: 0.6;
+    font-size: 0.9rem;
+    margin-bottom: 36px;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .card-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--nugreen);
+    padding: 18px 28px 0;
+    margin-bottom: 2px;
+  }
+  .card-body { padding: 16px 28px 28px; }
+
+  /* ── Fields ── */
+  .fields-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+  }
+  .field-full { grid-column: 1 / -1; }
+
+  label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: var(--nublue);
+    margin-bottom: 8px;
+    letter-spacing: 0.01em;
+    transition: opacity 0.2s;
+  }
+  label.dimmed { opacity: 0.38; }
+
+  select {
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--nublue);
+    background: var(--white);
+    border: 2px solid var(--nublue-20);
+    border-radius: var(--radius-sm);
+    padding: 13px 44px 13px 16px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23252D64' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    cursor: pointer;
+    transition: border-color 0.18s, box-shadow 0.18s, opacity 0.2s;
+    outline: none;
+  }
+  select:hover:not(:disabled) { border-color: var(--nublue-40); }
+  select:focus { border-color: var(--nugreen); box-shadow: 0 0 0 3px rgba(89,163,69,0.18); }
+  select:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    background-color: var(--nugrey);
+  }
+  select option { font-weight: 400; }
+
+  /* ── Redicure depth section ── */
+  .redicure-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--nublue-10);
+  }
+  .redicure-tag {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--nublue);
+    opacity: 0.3;
+    transition: opacity 0.25s, color 0.25s;
+    margin-bottom: 2px;
+  }
+  .redicure-tag.active { opacity: 1; color: var(--nugreen); }
+  .redicure-tag svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* ── Result Card ── */
+  .result-card {
+    background: var(--nublue);
+    border-radius: var(--radius);
+    padding: 28px 28px 30px;
+    display: none;
+    animation: fadeUp 0.3s ease;
+    margin-bottom: 24px;
+  }
+  .result-card.visible { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--blueliner);
+    margin-bottom: 10px;
+  }
+  .result-type {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 20px;
+  }
+  .pressure-grid {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .pressure-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+
+  .pressure-block {
+    background: rgba(255,255,255,0.07);
+    border-radius: var(--radius-sm);
+    padding: 18px 16px 16px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .pressure-block-label {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+  }
+  .pressure-value {
+    font-weight: 900;
+    font-size: 2.4rem;
+    color: var(--white);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .pressure-unit {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+  }
+  .pressure-block.highlight {
+    background: rgba(89,163,69,0.20);
+    border-color: rgba(89,163,69,0.35);
+  }
+  .pressure-block.highlight .pressure-value { color: #a8e077; }
+
+  .result-note {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.6;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 16px;
+  }
+
+  /* ── Reference Table ── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  thead th {
+    background: var(--nublue);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    text-align: left;
+  }
+  thead th:not(:first-child) { text-align: center; }
+  .section-row td {
+    background: var(--nugreen);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+  }
+  tbody tr.data-row td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--nublue-10);
+    color: var(--nublue);
+    font-weight: 400;
+  }
+  tbody tr.data-row td:not(:first-child) { text-align: center; font-weight: 600; }
+  tbody tr.data-row:last-child td { border-bottom: none; }
+  tbody tr.data-row:hover td { background: var(--nublue-10); }
+  tbody tr.data-row.active-row td { background: rgba(89,163,69,0.12); font-weight: 700; }
+  tbody tr.data-row.active-row td:first-child {
+    border-left: 3px solid var(--nugreen);
+    padding-left: 13px;
+  }
+  .sub-head-row td {
+    padding: 6px 16px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(37,45,100,0.4);
+    border-bottom: 1px solid var(--nublue-10);
+    text-align: center;
+  }
+  .sub-head-row td:first-child { text-align: left; }
+
+  /* ── Divider / empty state / footer ── */
+  .divider { height: 1px; background: var(--nublue-10); margin: 8px 0 20px; }
+  .placeholder { text-align: center; padding: 32px 20px; color: var(--nublue); opacity: 0.4; }
+  .placeholder svg { width: 40px; height: 40px; margin-bottom: 10px; opacity: 0.4; }
+  .placeholder p { font-size: 0.85rem; font-weight: 600; }
+  footer {
+    text-align: center; margin-top: 48px;
+    font-size: 0.72rem; color: var(--nublue);
+    opacity: 0.35; font-weight: 600; letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 520px) {
+    .card-body { padding: 14px 18px 22px; }
+    .fields-grid, .redicure-fields { grid-template-columns: 1fr; }
+    .field-full { grid-column: 1; }
+    .redicure-tag { grid-column: 1; }
+    .pressure-value { font-size: 1.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<main>
+  <h2 class="page-title">Recommended Pressures</h2>
+  <p class="page-subtitle">Select a bladder type and size to view the recommended pressure range.</p>
+
+  <!-- Inputs Card -->
+  <div class="card">
+    <div class="card-label">Inputs</div>
+    <div class="card-body">
+      <div class="fields-grid">
+        <div class="field field-full">
+          <label for="typeSelect">Bladder / Junction Type</label>
+          <select id="typeSelect" onchange="onTypeChange()">
+            <option value="">— Select a type —</option>
+            <option value="rubber">Standard Rubber Bladder</option>
+            <option value="vinyl">Standard Vinyl Bladder</option>
+            <option value="rubber-junction">Rubber Junction</option>
+            <option value="silicone-junction">Silicone Junction</option>
+            <option value="redicure">Redicure Bladder</option>
+          </select>
+        </div>
+        <div class="field field-full">
+          <label for="sizeSelect">Size</label>
+          <select id="sizeSelect" disabled onchange="onSizeChange()">
+            <option value="">— Select a size —</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Redicure-only depth fields -->
+      <div class="redicure-fields">
+        <div class="redicure-tag" id="redicureTag">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/>
+          </svg>
+          Redicure — Depth Settings
+        </div>
+        <div class="field">
+          <label for="directionSelect" id="directionLabel" class="dimmed">Direction</label>
+          <select id="directionSelect" disabled onchange="onDirectionChange()">
+            <option value="">— Select direction —</option>
+            <option value="below">Below Ground</option>
+            <option value="above">Above Ground</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="depthSelect" id="depthLabel" class="dimmed">Depth / Height (metres)</label>
+          <select id="depthSelect" disabled onchange="onDepthChange()">
+            <option value="">— Select depth —</option>
+            <option value="1">1 m</option>
+            <option value="2">2 m</option>
+            <option value="3">3 m</option>
+            <option value="4">4 m</option>
+            <option value="5">5 m</option>
+            <option value="6">6 m</option>
+            <option value="7">7 m</option>
+            <option value="8">8 m</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result Card -->
+  <div class="result-card" id="resultCard">
+    <div class="result-eyebrow" id="resultEyebrow">Recommended Pressure Range</div>
+    <div class="result-type" id="resultLabel"></div>
+
+    <!-- Standard Min/Max -->
+    <div id="standardResult">
+      <div class="pressure-grid cols-2">
+        <div class="pressure-block">
+          <div class="pressure-block-label">Minimum</div>
+          <div class="pressure-value" id="valMin">—</div>
+          <div class="pressure-unit">PSI</div>
+        </div>
+        <div class="pressure-block">
+          <div class="pressure-block-label">Maximum</div>
+          <div class="pressure-value" id="valMax">—</div>
+          <div class="pressure-unit">PSI</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Redicure Flow/Return -->
+    <div id="redicureResult" style="display:none;">
+      <div class="pressure-grid cols-2">
+        <div class="pressure-block highlight">
+          <div class="pressure-block-label">Flow Pressure</div>
+          <div class="pressure-value" id="valFlow">—</div>
+          <div class="pressure-unit">PSI</div>
+        </div>
+        <div class="pressure-block">
+          <div class="pressure-block-label">Return Pressure</div>
+          <div class="pressure-value" id="valReturn">—</div>
+          <div class="pressure-unit">PSI</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-note" id="resultNote"></div>
+  </div>
+
+  <!-- Reference Table -->
+  <div class="card">
+    <div class="card-label">Results</div>
+    <div class="card-body" style="padding-bottom:0; padding-top:12px;">
+      <div class="divider" style="margin-top:0;"></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead id="tableHead">
+          <tr><th>Size</th><th>Min PSI</th><th>Max PSI</th></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <div style="height:8px;"></div>
+  </div>
+
+  <footer>© Nuflow Australasia &nbsp;·&nbsp; Bladder Pressure Reference Tool</footer>
+</main>
+
+<script>
+// ── Data ──────────────────────────────────────────────────────────
+const DATA = {
+  rubber: {
+    label: "Standard Rubber Bladder",
+    sizes: [
+      { size: "40mm",  min: 35, max: 40 },
+      { size: "50mm",  min: 32, max: 36 },
+      { size: "65mm",  min: 23, max: 27 },
+      { size: "100mm", min: 18, max: 22 },
+      { size: "150mm", min: 12, max: 16 },
+      { size: "225mm", min: 10, max: 12 },
+      { size: "300mm", min:  6, max:  8 },
+      { size: "375mm", min:  5, max:  7 },
+      { size: "450mm", min:  4, max:  6 },
+    ]
+  },
+  vinyl: {
+    label: "Standard Vinyl Bladder",
+    sizes: [
+      { size: "525mm",  min: 3, max: 5 },
+      { size: "600mm",  min: 3, max: 4 },
+      { size: "675mm",  min: 2, max: 4 },
+      { size: "825mm",  min: 2, max: 3 },
+      { size: "900mm",  min: 1, max: 2 },
+      { size: "1000mm", min: 1, max: 2 },
+    ]
+  },
+  "rubber-junction": {
+    label: "Rubber Junction",
+    sizes: [
+      { size: "100 x 50",  min: 25, max: 28 },
+      { size: "100 x 65",  min: 23, max: 25 },
+      { size: "100 x 100", min: 18, max: 24 },
+      { size: "150 x 100", min: 15, max: 18 },
+      { size: "150 x 150", min: 12, max: 16 },
+      { size: "225 x 100", min: 13, max: 16 },
+      { size: "225 x 150", min: 12, max: 15 },
+    ]
+  },
+  "silicone-junction": {
+    label: "Silicone Junction",
+    sizes: [
+      { size: "100 x 100", min: 8, max: 12 },
+      { size: "150 x 100", min: 8, max: 12 },
+      { size: "150 x 150", min: 8, max: 12 },
+    ]
+  }
+};
+
+const REDICURE = {
+  label: "Redicure Bladder",
+  sizes: ["100mm", "150mm", "225mm"],
+  data: {
+    "100mm": {
+      below: [
+        { depth:1, flow:18,   ret:10 }, { depth:2, flow:16.5, ret:10 },
+        { depth:3, flow:15,   ret:10 }, { depth:4, flow:13.5, ret:10 },
+        { depth:5, flow:12,   ret:10 }, { depth:6, flow:10.5, ret:10 },
+        { depth:7, flow:9,    ret:10 }, { depth:8, flow:7.5,  ret:10 },
+      ],
+      above: [
+        { depth:1, flow:18,   ret:10 }, { depth:2, flow:19.5, ret:10 },
+        { depth:3, flow:21,   ret:10 }, { depth:4, flow:22.5, ret:10 },
+        { depth:5, flow:24,   ret:10 }, { depth:6, flow:25.5, ret:10 },
+        { depth:7, flow:27,   ret:10 }, { depth:8, flow:28.5, ret:10 },
+      ]
+    },
+    "150mm": {
+      below: [
+        { depth:1, flow:15,   ret:8 }, { depth:2, flow:13.5, ret:8 },
+        { depth:3, flow:12,   ret:8 }, { depth:4, flow:10.5, ret:8 },
+        { depth:5, flow:9,    ret:8 }, { depth:6, flow:7.5,  ret:8 },
+        { depth:7, flow:6,    ret:8 }, { depth:8, flow:4.5,  ret:8 },
+      ],
+      above: [
+        { depth:1, flow:15,   ret:8 }, { depth:2, flow:16.5, ret:8 },
+        { depth:3, flow:18,   ret:8 }, { depth:4, flow:19.5, ret:8 },
+        { depth:5, flow:21,   ret:8 }, { depth:6, flow:22.5, ret:8 },
+        { depth:7, flow:24,   ret:8 }, { depth:8, flow:25.5, ret:8 },
+      ]
+    },
+    "225mm": {
+      below: [
+        { depth:1, flow:10,   ret:4 }, { depth:2, flow:8.5,  ret:4 },
+        { depth:3, flow:7,    ret:4 }, { depth:4, flow:5.5,  ret:4 },
+        { depth:5, flow:4,    ret:4 }, { depth:6, flow:2.5,  ret:4 },
+        { depth:7, flow:1,    ret:4 }, { depth:8, flow:-0.5, ret:4 },
+      ],
+      above: [
+        { depth:1, flow:1,    ret:4 }, { depth:2, flow:11.5, ret:4 },
+        { depth:3, flow:13,   ret:4 }, { depth:4, flow:14.5, ret:4 },
+        { depth:5, flow:16,   ret:4 }, { depth:6, flow:17.5, ret:4 },
+        { depth:7, flow:19,   ret:4 }, { depth:8, flow:20.5, ret:4 },
+      ]
+    }
+  }
+};
+
+// ── Utilities ─────────────────────────────────────────────────────
+const fmt = v => Number.isInteger(v) ? String(v) : v.toFixed(1);
+const $ = id => document.getElementById(id);
+
+function resetResult() { $('resultCard').classList.remove('visible'); }
+
+// ── Type change ───────────────────────────────────────────────────
+function onTypeChange() {
+  const type = $('typeSelect').value;
+  const rec  = type === 'redicure';
+
+  // Reset downstream
+  $('sizeSelect').innerHTML = '<option value="">— Select a size —</option>';
+  $('sizeSelect').disabled  = !type;
+  $('directionSelect').value   = '';
+  $('directionSelect').disabled = !rec;
+  $('depthSelect').value    = '';
+  $('depthSelect').disabled = true;
+  $('directionLabel').classList.toggle('dimmed', !rec);
+  $('depthLabel').classList.add('dimmed');
+  $('redicureTag').classList.toggle('active', rec);
+  resetResult();
+
+  if (!type) { renderTable(null); return; }
+
+  const sizes = rec ? REDICURE.sizes : DATA[type].sizes.map(s => s.size);
+  sizes.forEach(sz => {
+    const opt = document.createElement('option');
+    opt.value = sz; opt.textContent = sz;
+    $('sizeSelect').appendChild(opt);
+  });
+
+  renderTable(type);
+}
+
+// ── Size change ───────────────────────────────────────────────────
+function onSizeChange() {
+  const type  = $('typeSelect').value;
+  const size  = $('sizeSelect').value;
+  resetResult();
+
+  if (!size) { renderTable(type); return; }
+
+  if (type === 'redicure') {
+    const dir   = $('directionSelect').value;
+    const depth = $('depthSelect').value;
+    renderTable('redicure', size, dir || null, depth ? +depth : null);
+    if (dir && depth) showRedicureResult(size, dir, +depth);
+  } else {
+    const item = DATA[type].sizes.find(s => s.size === size);
+    showStandardResult(DATA[type].label, size, item.min, item.max);
+    renderTable(type, size);
+  }
+}
+
+// ── Direction change (Redicure only) ─────────────────────────────
+function onDirectionChange() {
+  const dir  = $('directionSelect').value;
+  const size = $('sizeSelect').value;
+
+  // Enable depth only once direction chosen
+  $('depthSelect').disabled = !dir;
+  $('depthLabel').classList.toggle('dimmed', !dir);
+  $('depthSelect').value = '';
+  resetResult();
+
+  renderTable('redicure', size || null, dir || null, null);
+}
+
+// ── Depth change (Redicure only) ──────────────────────────────────
+function onDepthChange() {
+  const size  = $('sizeSelect').value;
+  const dir   = $('directionSelect').value;
+  const depth = $('depthSelect').value;
+
+  resetResult();
+  renderTable('redicure', size || null, dir || null, depth ? +depth : null);
+  if (size && dir && depth) showRedicureResult(size, dir, +depth);
+}
+
+// ── Show results ──────────────────────────────────────────────────
+function showStandardResult(typeLabel, size, min, max) {
+  $('resultEyebrow').textContent = 'Recommended Pressure Range';
+  $('resultLabel').textContent   = `${typeLabel} — ${size}`;
+  $('valMin').textContent = fmt(min);
+  $('valMax').textContent = fmt(max);
+  $('standardResult').style.display = '';
+  $('redicureResult').style.display  = 'none';
+  $('resultNote').textContent = 'Inflate gradually and monitor continuously. Do not exceed the maximum PSI. When relining through a bend, operate towards the upper end of the recommended pressure range to ensure full liner contact. Always follow site-specific safety procedures and Nuflow installation guidelines.';
+  $('resultCard').classList.add('visible');
+}
+
+function showRedicureResult(size, dir, depth) {
+  const row = REDICURE.data[size][dir].find(r => r.depth === depth);
+  if (!row) return;
+  const dirLabel = dir === 'below' ? 'Below Ground' : 'Above Ground';
+  $('resultEyebrow').textContent = 'Recommended Operating Pressures';
+  $('resultLabel').textContent   = `Redicure Bladder — ${size} · ${dirLabel} · ${depth}m`;
+  $('valFlow').textContent   = fmt(row.flow);
+  $('valReturn').textContent = fmt(row.ret);
+  $('standardResult').style.display = 'none';
+  $('redicureResult').style.display  = '';
+  $('resultNote').textContent = 'Hot water cure — gravity affects flow pressure. Circulate water to confirm stable temperatures before pressurising. Monitor flow and return pressures continuously. Always follow site-specific safety procedures and Nuflow installation guidelines.';
+  $('resultCard').classList.add('visible');
+}
+
+// ── Reference Table ───────────────────────────────────────────────
+function renderTable(typeKey, activeSize, activeDir, activeDepth) {
+  const thead = $('tableHead');
+  const tbody = $('tableBody');
+  tbody.innerHTML = '';
+
+  if (!typeKey) {
+    thead.innerHTML = '<tr><th>Size</th><th>Min PSI</th><th>Max PSI</th></tr>';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td colspan="3" style="padding:0;"><div class="placeholder">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+      </svg><p>Select a type above to view the full reference table</p></div></td>`;
+    tbody.appendChild(tr);
+    return;
+  }
+
+  if (typeKey === 'redicure') {
+    renderRedicureTable(activeSize, activeDir, activeDepth);
+    return;
+  }
+
+  // Standard table
+  thead.innerHTML = '<tr><th>Size</th><th>Min PSI</th><th>Max PSI</th></tr>';
+  const group = DATA[typeKey];
+  const sec = document.createElement('tr');
+  sec.className = 'section-row';
+  sec.innerHTML = `<td colspan="3">${group.label}</td>`;
+  tbody.appendChild(sec);
+  group.sizes.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.className = 'data-row' + (item.size === activeSize ? ' active-row' : '');
+    tr.innerHTML = `<td>${item.size}</td><td>${fmt(item.min)}</td><td>${fmt(item.max)}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderRedicureTable(activeSize, activeDir, activeDepth) {
+  const thead = $('tableHead');
+  const tbody = $('tableBody');
+
+  if (activeSize) {
+    // Show depth table for selected size
+    thead.innerHTML = `<tr><th>Depth (m)</th><th>Flow PSI</th><th>Return PSI</th></tr>`;
+    const dirs = activeDir ? [activeDir] : ['below', 'above'];
+    const dirNames = { below: 'Below Ground', above: 'Above Ground' };
+
+    dirs.forEach(dir => {
+      const sec = document.createElement('tr');
+      sec.className = 'section-row';
+      sec.innerHTML = `<td colspan="3">${activeSize} — ${dirNames[dir]}</td>`;
+      tbody.appendChild(sec);
+
+      REDICURE.data[activeSize][dir].forEach(row => {
+        const isActive = activeDir === dir && activeDepth === row.depth;
+        const tr = document.createElement('tr');
+        tr.className = 'data-row' + (isActive ? ' active-row' : '');
+        tr.innerHTML = `<td>${row.depth} m</td><td>${fmt(row.flow)}</td><td>${fmt(row.ret)}</td>`;
+        tbody.appendChild(tr);
+      });
+    });
+  } else {
+    // No size yet — show overview of all sizes at 1m
+    thead.innerHTML = `<tr>
+      <th>Size</th>
+      <th style="text-align:center;" colspan="2">Below Ground</th>
+      <th style="text-align:center;" colspan="2">Above Ground</th>
+    </tr>`;
+    const sub = document.createElement('tr');
+    sub.className = 'sub-head-row';
+    sub.innerHTML = `<td>—</td><td>Flow PSI</td><td>Return PSI</td><td>Flow PSI</td><td>Return PSI</td>`;
+    tbody.appendChild(sub);
+
+    const sec = document.createElement('tr');
+    sec.className = 'section-row';
+    sec.innerHTML = `<td colspan="5">Redicure Bladder — at 1 metre depth</td>`;
+    tbody.appendChild(sec);
+
+    REDICURE.sizes.forEach(sz => {
+      const b = REDICURE.data[sz].below[0];
+      const a = REDICURE.data[sz].above[0];
+      const tr = document.createElement('tr');
+      tr.className = 'data-row';
+      tr.innerHTML = `<td>${sz}</td><td>${fmt(b.flow)}</td><td>${fmt(b.ret)}</td><td>${fmt(a.flow)}</td><td>${fmt(a.ret)}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+}
+</script>
+</body>
+</html>
