@@ -397,6 +397,14 @@
       </div>
     </div>
 
+    <!-- Layflat tube info — visible for Standard Rubber Bladder only -->
+    <div id="rubberLayflatRow" style="display:none; margin-bottom:20px;">
+      <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:14px 18px; display:flex; align-items:center; gap:14px;">
+        <span style="font-size:0.62rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.4); white-space:nowrap;">Layflat Tube</span>
+        <span id="valLayflat" style="font-size:1.5rem; font-weight:900; color:#fff; letter-spacing:-0.02em;">—</span>
+      </div>
+    </div>
+
     <div class="result-note" id="resultNote"></div>
   </div>
 
@@ -426,15 +434,16 @@ const DATA = {
   rubber: {
     label: "Standard Rubber Bladder",
     sizes: [
-      { size: "40mm",  min: 35, max: 40 },
-      { size: "50mm",  min: 32, max: 36 },
-      { size: "65mm",  min: 23, max: 27 },
-      { size: "100mm", min: 18, max: 22 },
-      { size: "150mm", min: 12, max: 16 },
-      { size: "225mm", min: 10, max: 12 },
-      { size: "300mm", min:  6, max:  8 },
-      { size: "375mm", min:  5, max:  7 },
-      { size: "450mm", min:  4, max:  6 },
+      { size: "40mm",  min: 35, max: 40, layflat: "25mm"  },
+      { size: "50mm",  min: 32, max: 36, layflat: "38mm"  },
+      { size: "65mm",  min: 23, max: 27, layflat: "65mm"  },
+      { size: "100mm", min: 18, max: 22, layflat: "81mm"  },
+      { size: "150mm", min: 12, max: 16, layflat: "126mm" },
+      { size: "225mm", min: 10, max: 12, layflat: "172mm" },
+      { size: "300mm", min:  6, max:  8, layflat: "270mm" },
+      { size: "375mm", min:  5, max:  7, layflat: "270mm" },
+      { size: "450mm", min:  4, max:  6, layflat: "320mm" },
+      { size: "525mm", min:  3, max:  5, layflat: "320mm" },
     ]
   },
   vinyl: {
@@ -569,7 +578,7 @@ function onSizeChange() {
     if (dir && depth) showRedicureResult(size, dir, +depth);
   } else {
     const item = DATA[type].sizes.find(s => s.size === size);
-    showStandardResult(DATA[type].label, size, item.min, item.max);
+    showStandardResult(DATA[type].label, size, item.min, item.max, item.layflat || null);
     renderTable(type, size);
   }
 }
@@ -600,13 +609,20 @@ function onDepthChange() {
 }
 
 // ── Show results ──────────────────────────────────────────────────
-function showStandardResult(typeLabel, size, min, max) {
+function showStandardResult(typeLabel, size, min, max, layflat) {
   $('resultEyebrow').textContent = 'Recommended Pressure Range';
   $('resultLabel').textContent   = `${typeLabel} — ${size}`;
   $('valMin').textContent = fmt(min);
   $('valMax').textContent = fmt(max);
   $('standardResult').style.display = '';
   $('redicureResult').style.display  = 'none';
+  // Layflat row — rubber only
+  if (layflat) {
+    $('valLayflat').textContent = layflat;
+    $('rubberLayflatRow').style.display = '';
+  } else {
+    $('rubberLayflatRow').style.display = 'none';
+  }
   $('resultNote').textContent = 'Inflate gradually and monitor continuously. Do not exceed the maximum PSI. When relining through a bend, operate towards the upper end of the recommended pressure range to ensure full liner contact. Always follow site-specific safety procedures and Nuflow installation guidelines.';
   $('resultCard').classList.add('visible');
 }
@@ -619,8 +635,9 @@ function showRedicureResult(size, dir, depth) {
   $('resultLabel').textContent   = `Redicure Bladder — ${size} · ${dirLabel} · ${depth}m`;
   $('valFlow').textContent   = fmt(row.flow);
   $('valReturn').textContent = fmt(row.ret);
-  $('standardResult').style.display = 'none';
-  $('redicureResult').style.display  = '';
+  $('standardResult').style.display  = 'none';
+  $('redicureResult').style.display   = '';
+  $('rubberLayflatRow').style.display = 'none';
   $('resultNote').textContent = 'Hot water cure — gravity affects flow pressure. Circulate water to confirm stable temperatures before pressurising. Monitor flow and return pressures continuously. Always follow site-specific safety procedures and Nuflow installation guidelines.';
   $('resultCard').classList.add('visible');
 }
@@ -648,16 +665,23 @@ function renderTable(typeKey, activeSize, activeDir, activeDepth) {
   }
 
   // Standard table
-  thead.innerHTML = '<tr><th>Size</th><th>Min PSI</th><th>Max PSI</th></tr>';
   const group = DATA[typeKey];
+  const isRubber = typeKey === 'rubber';
+  if (isRubber) {
+    thead.innerHTML = '<tr><th>Size</th><th>Min PSI</th><th>Max PSI</th><th>Layflat Tube</th></tr>';
+  } else {
+    thead.innerHTML = '<tr><th>Size</th><th>Min PSI</th><th>Max PSI</th></tr>';
+  }
   const sec = document.createElement('tr');
   sec.className = 'section-row';
-  sec.innerHTML = `<td colspan="3">${group.label}</td>`;
+  sec.innerHTML = `<td colspan="${isRubber ? 4 : 3}">${group.label}</td>`;
   tbody.appendChild(sec);
   group.sizes.forEach(item => {
     const tr = document.createElement('tr');
     tr.className = 'data-row' + (item.size === activeSize ? ' active-row' : '');
-    tr.innerHTML = `<td>${item.size}</td><td>${fmt(item.min)}</td><td>${fmt(item.max)}</td>`;
+    tr.innerHTML = isRubber
+      ? `<td>${item.size}</td><td>${fmt(item.min)}</td><td>${fmt(item.max)}</td><td>${item.layflat}</td>`
+      : `<td>${item.size}</td><td>${fmt(item.min)}</td><td>${fmt(item.max)}</td>`;
     tbody.appendChild(tr);
   });
 }
