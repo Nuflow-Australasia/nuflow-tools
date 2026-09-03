@@ -322,6 +322,120 @@
     font-weight: 600;
   }
 
+  /* HTAR Guide */
+  .htar-title {
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: var(--nublue);
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+
+  .htar-intro {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--nublue);
+    opacity: 0.8;
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .htar-warning-box {
+    background: rgba(89,163,69,0.08);
+    border: 1px solid rgba(89,163,69,0.25);
+    border-left: 3px solid var(--nugreen);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 16px 18px;
+    margin: 18px 0 26px;
+    font-size: 0.85rem;
+    color: var(--nublue);
+    line-height: 1.7;
+  }
+
+  .htar-warning-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--nugreen);
+    margin-bottom: 8px;
+  }
+
+  .htar-list {
+    margin: 10px 0 0 20px;
+  }
+  .htar-list li {
+    font-size: 0.85rem;
+    color: var(--nublue);
+    line-height: 1.7;
+    margin-bottom: 4px;
+  }
+
+  .htar-section {
+    margin-bottom: 30px;
+    padding-top: 22px;
+    border-top: 1px solid var(--nublue-10);
+  }
+  .htar-section:first-of-type { border-top: none; padding-top: 0; }
+
+  .htar-section-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--nublue);
+    margin-bottom: 2px;
+  }
+
+  .htar-section-sub {
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--blueliner);
+    background: rgba(77,199,236,0.1);
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  .htar-section-desc {
+    font-size: 0.83rem;
+    font-weight: 400;
+    color: var(--nublue);
+    opacity: 0.75;
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+
+  .htar-notes-box {
+    background: var(--nublue);
+    border-radius: var(--radius-sm);
+    padding: 20px 22px;
+    margin-top: 8px;
+  }
+
+  .htar-notes-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--blueliner);
+    margin-bottom: 12px;
+  }
+
+  .htar-notes-list {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .htar-notes-list li {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.75;
+    margin-bottom: 6px;
+  }
+  .htar-notes-list li:last-child { margin-bottom: 0; }
+  .htar-notes-list strong { color: var(--white); font-weight: 700; }
+
   /* Considerations */
   .consideration-item {
     display: flex;
@@ -508,6 +622,110 @@
           <div class="empty-icon">🧪</div>
           <div class="empty-text">Select a Part A and Part B to view cure times</div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HTAR Curing Guide Card (shown only when HTAR Part A selected) -->
+  <div class="card htar-guide" id="htarGuideCard" style="display:none;">
+    <div class="card-label">HTAR Guide</div>
+    <div class="card-body">
+      <h2 class="htar-title">HTAR Liner Curing &amp; Post-Cure Process</h2>
+      <p class="htar-intro">The HTAR liner uses a high-performance Novolac Epoxy resin system that develops its final strength, chemical resistance and temperature resistance through controlled curing and post-curing.</p>
+      <p class="htar-intro">Heat must be applied gradually. If the liner is taken directly to the final cure temperature, the resin may soften before it has developed enough thermal stability, increasing the risk of movement, wrinkling, sagging or collapse.</p>
+      <p class="htar-intro">The staged cure process allows the liner to build strength progressively while remaining supported by the bladder or, where the bladder has been removed, by a completely water-filled pipe. The liner must remain supported during heat-up, hold time and cool-down, and must not be drained or deflated until it has cooled below 40°C.</p>
+
+      <div class="htar-warning-box">
+        <div class="htar-warning-title">Support Required During Cure</div>
+        <p>The HTAR liner must remain supported while it is being heated, held at temperature and cooled down. Support may be provided by:</p>
+        <ol class="htar-list">
+          <li><strong>Bladder</strong> — An inflated bladder during curing; or</li>
+          <li><strong>In situ</strong> — A completely water-filled pipe during post-cure where the bladder has already been removed.</li>
+        </ol>
+        <p style="margin-top:10px;">Do not deflate the bladder, drain the pipe or remove support while the liner is hot. The liner must cool to <strong>below 40°C</strong> before bladder removal, draining or return to service.</p>
+      </div>
+
+      <!-- Method 1 -->
+      <div class="htar-section">
+        <div class="htar-section-title">1. Bladder-Supported Hot Water Cure</div>
+        <div class="htar-section-sub">Maximum cure temperature: 65–75°C</div>
+        <p class="htar-section-desc">Use this method for standard HTAR hot water curing where the bladder remains in place.</p>
+        <div class="table-wrap" style="margin:0 -28px;padding:0 28px;">
+          <table>
+            <thead>
+              <tr><th style="text-align:left;">Stage</th><th>Target Temp</th><th>Minimum Hold Time</th></tr>
+            </thead>
+            <tbody>
+              <tr><td style="text-align:left;font-weight:600;">Inflate bladder / form liner</td><td>Ambient</td><td>Until fully formed</td></tr>
+              <tr><td style="text-align:left;font-weight:600;">Warm-up stage 1</td><td>40°C</td><td>30 minutes</td></tr>
+              <tr><td style="text-align:left;font-weight:600;">Warm-up stage 2</td><td>60°C</td><td>60 minutes</td></tr>
+              <tr><td style="text-align:left;font-weight:600;">Final cure</td><td>65–75°C</td><td>Minimum 2 hours</td></tr>
+              <tr><td style="text-align:left;font-weight:600;">Cool-down under pressure</td><td>Below 40°C</td><td>Before deflation/removal</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Method 2 -->
+      <div class="htar-section">
+        <div class="htar-section-title">2. Bladder-Supported Steam Cure</div>
+        <div class="htar-section-sub">Maximum cure temperature: up to 140°C</div>
+        <p class="htar-section-desc">Use this method where higher cure temperatures are required and the bladder remains in place.</p>
+        <div class="table-wrap" style="margin:0 -28px;padding:0 28px;">
+          <table>
+            <thead>
+              <tr><th style="text-align:left;">Final Target</th><th style="text-align:left;">Cure Schedule</th></tr>
+            </thead>
+            <tbody>
+              <tr><td style="text-align:left;font-weight:700;">80°C</td><td style="text-align:left;font-weight:400;">40°C for 30 min → 60°C for 60 min → 80°C for 2 hrs</td></tr>
+              <tr><td style="text-align:left;font-weight:700;">100°C</td><td style="text-align:left;font-weight:400;">40°C for 30 min → 60°C for 60 min → 80°C for 2 hrs → 100°C for 2 hrs</td></tr>
+              <tr><td style="text-align:left;font-weight:700;">120°C</td><td style="text-align:left;font-weight:400;">40°C for 30 min → 60°C for 60 min → 80°C for 2 hrs → 100°C for 2 hrs → 120°C for 2 hrs</td></tr>
+              <tr><td style="text-align:left;font-weight:700;">140°C</td><td style="text-align:left;font-weight:400;">40°C for 30 min → 60°C for 60 min → 80°C for 2 hrs → 100°C for 2 hrs → 120°C for 2 hrs → 140°C for 2–3 hrs</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="htar-section-desc" style="margin-top:12px;margin-bottom:0;">After the final hold, allow the liner to cool under bladder pressure. Do not deflate or remove the bladder until the liner temperature is below <strong>40°C</strong>.</p>
+      </div>
+
+      <!-- Method 3 -->
+      <div class="htar-section">
+        <div class="htar-section-title">3. Unsupported Water-Filled Post-Cure</div>
+        <div class="htar-section-sub">For liners already cured at ambient temperature or after bladder removal</div>
+        <p class="htar-section-desc">Where the liner is already cured and the bladder has been removed, the relined pipe must be completely filled with water before heating. The water provides internal support to reduce the risk of liner softening, sagging or collapse.</p>
+        <div class="table-wrap" style="margin:0 -28px;padding:0 28px;">
+          <table>
+            <thead>
+              <tr><th style="text-align:left;">Final Target</th><th style="text-align:left;">Post-Cure Schedule</th></tr>
+            </thead>
+            <tbody>
+              <tr><td style="text-align:left;font-weight:700;">80°C</td><td style="text-align:left;font-weight:400;">Fill pipe completely → 40°C for 30 min → 60°C for 2 hrs → 80°C for 2 hrs</td></tr>
+              <tr><td style="text-align:left;font-weight:700;">100°C</td><td style="text-align:left;font-weight:400;">Fill pipe completely → 40°C for 30 min → 60°C for 2 hrs → 80°C for 2 hrs → 100°C for 2 hrs</td></tr>
+              <tr><td style="text-align:left;font-weight:700;">120°C</td><td style="text-align:left;font-weight:400;">Head Office approval required</td></tr>
+              <tr><td style="text-align:left;font-weight:700;">140°C</td><td style="text-align:left;font-weight:400;">Not permitted unless engineered and approved by Head Office</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="htar-section-desc" style="margin-top:12px;margin-bottom:0;">The pipe must remain completely full during heat-up, hold time and cool-down. Do not drain the pipe until the liner temperature is below <strong>40°C</strong>.</p>
+      </div>
+
+      <!-- Important Notes -->
+      <div class="htar-notes-box">
+        <div class="htar-notes-title">Important Notes</div>
+        <ul class="htar-notes-list">
+          <li>Do not take the liner directly to the final cure temperature.</li>
+          <li>Heat must be increased in stages.</li>
+          <li>Hold times only start once the liner / outlet / return / far-end temperature reaches the target temperature.</li>
+          <li>Do not rely only on the heater or steam generator temperature.</li>
+          <li>Maintain bladder pressure during the full cure and cool-down cycle.</li>
+          <li>Steam curing above <strong>100°C</strong> requires Head Office approval.</li>
+          <li>Steam curing to <strong>140°C</strong> must be Head Office controlled or approved in writing.</li>
+          <li>Use only rated hoses, fittings, end caps, restraints and pressure relief equipment.</li>
+          <li>Record temperature, pressure and hold times for every cure.</li>
+          <li>Cure temperature does not automatically equal service temperature.</li>
+          <li>Final service temperature suitability must be confirmed by Nuflow Technical Team.</li>
+          <li>Where practical, cure a witness sample with the liner.</li>
+          <li>If pressure is lost, temperature drops, the liner moves, or the cure is interrupted, stop and contact Nuflow Technical before proceeding.</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -858,6 +1076,7 @@
   const cureTypeEl = document.getElementById('cureType');
   const resultCard = document.getElementById('resultCard');
   const tableWrap  = document.getElementById('tableWrap');
+  const htarGuideCard = document.getElementById('htarGuideCard');
 
   // ── PART A CHANGE ─────────────────────────────────────────────────────────
   partAEl.addEventListener('change', () => {
@@ -870,6 +1089,8 @@
     cureTypeEl.disabled = true;
     resultCard.classList.remove('visible');
     showEmpty();
+
+    htarGuideCard.style.display = (val === 'HTAR Part A') ? 'block' : 'none';
 
     if (val && partBMap[val]) {
       partBMap[val].forEach(b => {
